@@ -1,82 +1,89 @@
-const UserModel = require('../models/users.model');
+const UserModel = require('./../models/user.model');
 const jwt = require('jsonwebtoken')
 
 require('dotenv').config()
 
 
-const CreateUser = async (req, res) => {
+const CreateUser = async ({username, email, password}) => {
     try {
-        const userFromRequest = req.body
-
-        // const existingUser = await UserModel.findOne({
-        //     email: userFromRequest.email
-        // });
-
-        // if (existingUser) {
-        //     return res.status(409).json({
-        //         message: 'User already exist',
-        //     })
-        // }
-
-        const user = await UserModel.create({
-            name: userFromRequest.name,
-            password: userFromRequest.password,
-            email: userFromRequest.email,
-            contact: userFromRequest.contact,
-            phone_number: userFromRequest.phone_number,
-            gender: userFromRequest.gender
+        const existingUser = await UserModel.findOne({
+            email: email
         });
 
-        const token = jwt.sign({email: user.email, _id: user.id}, process.env.JWT_SECRET)
+        if (existingUser) {
+            return {
+                code: 409,
+                message: "User already exists",
+                success: false
+            }
+        }
+        console.log('no existing' , existingUser);
 
+        const user = await UserModel.create({
+            username: username,
+            email: email,
+            password: password,
+        });
+        
+        console.log('created:', user);
+        const token = jwt.sign({username: user.username, email: user.email, _id: user.id}, process.env.JWT_SECRET, {expiresIn: '1h'})
 
-    return res.status(201).json({
-        message: 'User created successfully',
-        user,
-        token
-    })
+        console.log('created:', token);
+
+    return {
+        code: 201,
+        message: "User created succefully",
+        success: true,
+        token,
+        user
+    }
     } catch (error) {
-        return res.status(400).json({
-            success: false,
-            message: "User creation failed"
-        })
+        return {
+            code: 400,
+            message: "Something went wrong. Please go back to home page",
+            success: false
+        }
     }
 }
 
 
-const Login = async (req, res) => {
+const Login = async ({username, password}) => {
+    console.log('login service');
     try {
-        const userFromRequest = req.body
-
         const user = await UserModel.findOne({
-            email: userFromRequest.email,
+            username: username,
         });
-    
+        
+        console.log(user);
         if (!user){
-            return res.status(404).json({
-                message: "User not found"
-            })
+            return {
+                code: 404,
+                message:"User not found"
+            }
         }
+        
+        const validPassword = await user.isValidPassword(password)
+        console.log(validPassword)
     
-        const validPassword = await user.isValidPassword(userFromRequest.password)
-    
-        console.log(validPassword);
         if (!validPassword) {
-            return res.status(422).json({
-                message: 'Email or password is not correct',
-            }) 
+            return {
+                code: 422,
+                message: "Email or password is not correct"
+            }
         }
     
-        const token = jwt.sign({email: user.email, _id: user.id}, process.env.JWT_SECRET)
-        return res.status(201).json({
+        const token = jwt.sign({username: username, email: user.email, _id: user.id}, process.env.JWT_SECRET, {expiresIn: '1h'})
+        return {
+            code: 200,
             message: 'Login successful',
             user,
             token
-        })
+        }
     } catch (error) {
-        return res.status(401).json({
+        return {
+            code: 401,
             message: "Unauthorized"
-        })
+        }
     }
 
 }

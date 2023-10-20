@@ -1,0 +1,28 @@
+<%-include('partials/header')-%>
+
+<div class="container mt-5">
+    <form class="w-50 mt-5 mx-auto shadow p-4 mb-4 bg-white rounded p-5" action="/user/signup" method="post">
+
+        <h2 class="mb-4">Signup</h2>
+
+        <div class="mb-3 mt-3">
+          <label for="username" class="form-label">Username:</label>
+          <input type="text" class="form-control" id="username" placeholder="Enter Username" name="username">
+        </div>
+    
+        <div class="mb-3 mt-3">
+          <label for="email" class="form-label">Email:</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter Email" name="email">
+        </div>
+    
+        <div class="mb-3">
+          <label for="pwd" class="form-label">Password:</label>
+          <input type="password" class="form-control" id="password" placeholder="Enter Password" name="password">
+        </div>
+    
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+
+<%-include('partials/footer')-%>

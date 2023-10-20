@@ -1,0 +1,9 @@
+body{
+    background: url('./images/profile.png');
+    background-size: cover;
+}
+
+a .navlink{
+    text-decoration: none;
+    color: white;
+}

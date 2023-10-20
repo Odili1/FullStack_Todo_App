@@ -5,11 +5,11 @@ const productsSchema = new Schema({
     _id: {
         type: Schema.Types.ObjectId
     },
-    title: {
+    task: {
         type: String,
         unique: true
     },
-    state: {
+    status: {
         type: String,
         enum: ["pending", "completed"],
         default: "pending"
