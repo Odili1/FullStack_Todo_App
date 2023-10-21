@@ -24,16 +24,21 @@ console.log(__dirname);
 
 // Routes Rendering
 app.get('/', (req, res) => {
-    res.render('home')
+    const user = res.locals.user;
+    console.log(user);
+    res.render('home', {user: (res.locals.user || null), message: null})
+    // res.render('home', {user: null, status: 401, message: 'Login or Signup to access your dashboard'})
 })
 
 app.get('/login', (req, res) =>{
-    res.render('login')
+    res.render('login', {user: (res.locals.user || null), message: null})
 })
 
 app.get('/signup', (req, res) => {
-    res.render('signup')
+    res.render('signup', {user: (res.locals.user || null), message: null})
 })
+
+
 
 
 
@@ -47,7 +52,7 @@ app.use("/user", userRoutes);
 // catch Errors
 app.use("*", (req, res) => {
     console.log('nothing');
-  res.status(404).render("404")
+  res.status(404).render("404", {user: (res.locals.user || null)})
 });
 
 // Port

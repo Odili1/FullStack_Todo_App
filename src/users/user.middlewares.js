@@ -12,10 +12,11 @@ exports.validateSignup = async (req, res, next) => {
 
         next()
     } catch (error) {
-        return res.status(422).json({
-            message: error.message,
-            success: false
-        })
+        // return res.status(422).json({
+        //     message: error.message,
+        //     success: false
+        // })
+        res.render('signup', {user: null, message: error.message})
     }
 }
 
@@ -31,9 +32,10 @@ exports.validateLogin = async(req, res, next) => {
 
         next()
     } catch (error) {
-        return res.status(422).json({
-            message: error.message,
-            success: false
-        })
+        // return res.status(422).json({
+        //     message: error.message,
+        //     success: false
+        // })
+        res.render('login', {user: null, message: error.message})
     }
 }

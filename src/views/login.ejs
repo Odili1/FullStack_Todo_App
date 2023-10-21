@@ -1,5 +1,13 @@
 <%-include('partials/header')-%>
 
+<% if (message) {%>
+    
+    <div class="alert alert-dark alert-dismissible fade show position-absolute w-100" role="alert">
+        <%=message%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<% } %>
+
 <div class="container mt-5">
     <!-- <img src="./../public/images/MarketSplash-PROGRAMMING-2-Cover-19-19.jpg" alt=""> -->
     <form class="w-50 mx-auto shadow p-4 mb-4 bg-white  rounded p-5" action="/user/login" method="post">

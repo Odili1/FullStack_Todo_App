@@ -25,8 +25,8 @@ const CreateUser = async ({username, email, password}) => {
             password: password,
         });
         
-        console.log('created:', user);
-        const token = jwt.sign({username: user.username, email: user.email, _id: user.id}, process.env.JWT_SECRET, {expiresIn: '1h'})
+        console.log('created:', user._id);
+        const token = jwt.sign({username: user.username, email: user.email, _id: user._id}, process.env.JWT_SECRET, {expiresIn: '1h'})
 
         console.log('created:', token);
 
@@ -58,7 +58,7 @@ const Login = async ({username, password}) => {
         if (!user){
             return {
                 code: 404,
-                message:"User not found"
+                message:"Invalid Username or Password"
             }
         }
         
@@ -68,11 +68,11 @@ const Login = async ({username, password}) => {
         if (!validPassword) {
             return {
                 code: 422,
-                message: "Email or password is not correct"
+                message: "Incorrect Email or Password"
             }
         }
     
-        const token = jwt.sign({username: username, email: user.email, _id: user.id}, process.env.JWT_SECRET, {expiresIn: '1h'})
+        const token = jwt.sign({username: username, email: user.email, _id: user._id}, process.env.JWT_SECRET, {expiresIn: '1h'})
         return {
             code: 200,
             message: 'Login successful',

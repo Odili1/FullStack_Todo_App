@@ -21,7 +21,7 @@
         }
     </style>
   </head>
-  <body class="vh-100">
+  <body class="h-100">
     <header class="bg-primary h">
         <nav class=" container d-flex justify-content-between h-100 navbar-expand-sm  navbar-dark py-3">
             <div class="h-100 ">
@@ -30,14 +30,23 @@
 
             <ul class="nav justify-content-end">
                 <li class="nav-item">
-                  <a class="nav-link text-white navlink fs-5" href="/user/dashboard">Dashboard</a>
+                    <a class="nav-link text-white navlink fs-4" href="/user/dashboard">Dashboard</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link text-white navlink fs-5" href="/signup">SignUp</a>
-                </li>
-                <li class="nav-item">
-                  <button class="btn border border-white rounded-5"><a class="nav-link text-white navlink fs-6" href="/login">Get Started</a></button>
-                </li>
+               <% if (user || false) { %>
+                    <li class="nav-item">
+                        <a class="nav-link text-white navlink fs-4" href="/user/stats">Stats</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white navlink fs-4" href="/user/logout">Logout</a>
+                    </li>
+               <% } else { %>
+                    <li class="nav-item">
+                        <a class="nav-link text-white navlink fs-4" href="/signup">SignUp</a>
+                      </li>
+                      <li class="nav-item">
+                        <button class="btn border border-white rounded-5"><a class="nav-link text-white navlink fs-6" href="/login">Get Started</a></button>
+                    </li>
+               <% } %>
               </ul>
         </nav>
     </header>

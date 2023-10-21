@@ -1,27 +1,25 @@
 const {Schema, model} = require('mongoose');
+const shortid = require('shortid');
 
 
-const productsSchema = new Schema({
-    _id: {
-        type: Schema.Types.ObjectId
-    },
+const tasksSchema = new Schema({
+    _id: {type: String, default: shortid.generate},
     task: {
         type: String,
-        unique: true
     },
     status: {
         type: String,
-        enum: ["pending", "completed"],
-        default: "pending"
+        enum: ["Pending", "Completed"],
+        default: "Pending"
     },
     user_id: {
-        type: Schema.Types.Number,
+        type: String,
         ref: "Users"
     },
     created_at: Date,
     updated_at: Date
 })
 
-const productsModel = model('Tasks', productsSchema);
+const productsModel = model('Tasks', tasksSchema);
 
 module.exports = productsModel

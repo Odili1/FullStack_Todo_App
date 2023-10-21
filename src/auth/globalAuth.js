@@ -1,5 +1,6 @@
 const UserModel = require('../models/user.model');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose')
 
 require('dotenv').config()
 
@@ -51,21 +52,21 @@ exports.cookieAuth = async(req, res, next) => {
         const token = req.cookies.jwt;
         
         if (!token) {
-            res.render('404', {status: 401, message: 'Login to view your dashboard'})
+            res.render('home', {user: null, status: 401, message: 'Login to view your dashboard'})
         }
         
         const decodedUser = await jwt.verify(token, process.env.JWT_SECRET);
+        // console.log('cookie auth');
         
         if (!decodedUser) {
-            res.render('404', {status: 401, message: 'Login to view your dashboard'})
+            res.render('home', {user: null, status: 401, message: 'Login to view your dashboard'})
         }
         
         // correct cookie
         res.locals.user = decodedUser
-        // console.log(res.locals)
         
         next()
     } catch (error) {
-        res.render('404', {status: 401, message: 'Login to view your dashboard'})
+        res.render('home', {user: null, status: 401, message: 'Login or Signup to access your dashboard'})
     }
 }

@@ -1,8 +1,9 @@
 const {Schema, model} = require('mongoose');
 const bcrypt = require('bcryptjs');
-const {Types} = Schema
+const shortid = require('shortid');
 
 const userSchema = new Schema({
+    _id: {type: String, default: shortid.generate},
     username: {
         type: String,
         unique: true
