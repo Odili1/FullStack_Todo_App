@@ -50,7 +50,7 @@ exports.bearerTokenAuth = (req, res, next) => {
 exports.cookieAuth = async(req, res, next) => {
     try {
         const token = req.cookies.jwt;
-        
+    
         if (!token) {
             res.render('home', {user: null, status: 401, message: 'Login to view your dashboard'})
         }

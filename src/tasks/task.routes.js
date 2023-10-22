@@ -1,5 +1,12 @@
 const router = require('express').Router();
 const taskService = require('./task.service');
+const middleware = require('./task.middlesware');
+// const cookieParser = require('cookie-parser');
+
+
+// router.use(cookieParser())
+
+
 console.log('Task Entry');
 // Onload
 router.get('/', async(req, res) => {
@@ -14,14 +21,12 @@ router.get('/', async(req, res) => {
     } else if (response.code == 409) {
         res.redirect('/404')
     } else {
-        console.log(response.tasks);
         res.render('dashboard', {user: response.user, tasks: response.tasks, message: response.message})
-        // res.end('response')
     }
 });
 
 // Add/Create Router
-router.post('/create', async (req, res) => {
+router.post('/create', middleware.validateAddTask, async (req, res) => {
     const {task} = req.body;
     const user = res.locals.user
     
@@ -32,7 +37,7 @@ router.post('/create', async (req, res) => {
         res.render('404', {message: response.message})
     }else if (response.code == 422){
         console.log('This is the task', task);
-        res.render('dashboard');
+        res.render('dashboard', {tasks: response.newTask, message: response.message});
     } else if (response.code == 201){
         console.log('created', task);
         res.redirect('/user/dashboard/tasks');
@@ -41,7 +46,7 @@ router.post('/create', async (req, res) => {
 });
 
 // Update Route
-router.post('/:id', async(req, res) => {
+router.post('/update/:id', async(req, res) => {
     const id = req.params.id;
     const user = res.locals.user;
     const {task, status} = req.body
@@ -50,9 +55,9 @@ router.post('/:id', async(req, res) => {
 
     if (response.code == 409) {
         res.render('404', {message: response.message})
-    }else if (response.code == 406){
-        console.log('could not update');
-        res.render('dashboard', {tasks: response.updatedTask, message: 'Could not Update Task'});
+    }else if (response.code == (406 || 422)){
+        console.log('could not update', res.locals.tasks);
+        res.render('dashboard', {tasks: res.locals.tasks, message: response.message});
     } else if (response.code == 204){
         res.redirect('/user/dashboard')
     }
@@ -60,21 +65,22 @@ router.post('/:id', async(req, res) => {
 
 
 // Delete Route
-router.post('/:id', async(req, res) => {
-    const id = req.params;
+router.post('/delete/:id', async(req, res) => {
+    const id = req.params.id;
     const user = res.locals.user;
+    console.log('req', id);
 
     const response = await taskService.deleteTask({id, user});
 
     if (response.code == 409) {
         res.render('404', {message: response.message})
     }else if (response.code == 422){
-        res.render('dashboard', {message: 'Could not Update Task'});
+        res.render('dashboard', {message: 'Could not Delete Task'});
     }
     else if (response.code == 406){
-        res.render('dashboard', {message: 'Could not Update Task'});
+        res.render('dashboard', {message: 'Could not Delete Task'});
     } else if (response.code == 200){
-        res.render('dashboard', {user: response.user, tasks: response.newList, message: response.message})
+        res.redirect('/user/dashboard')
     }
 })
 

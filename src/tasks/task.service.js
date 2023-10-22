@@ -1,6 +1,6 @@
-const { ObjectId } = require('bson');
+const objectHash = require('object-hash');
 const taskModel = require('./../models/task.model');
-const mongoose = require('mongoose')
+require('dotenv').config
 
 exports.getTasks = async(user, query) => {
     try {
@@ -14,7 +14,7 @@ exports.getTasks = async(user, query) => {
         if (tasks.length == 0) {
             return {
                 code: 404,
-                message: 'No tasks for today yet.',
+                message: 'No tasks for today yet',
                 tasks: null,
                 user,
             }
@@ -38,6 +38,11 @@ exports.getTasks = async(user, query) => {
         }
 
         if (tasks.length != 0) {
+            // const signedTasks = await jwt.sign(tasks, process.env.JWT_SECRET);
+            // res.signedCookies
+            // console.log(signedTasks);
+            // const hash = objectHash(tasks);
+
             return {
                 code: 200,
                 message: null,
@@ -60,7 +65,8 @@ exports.createTasks = async({task, user}) => {
         if (!task) {
             return {
                 code: 422,
-                message: 'Input a task'
+                message: 'Input a task',
+                newTask: null
             }
         }
 
@@ -138,6 +144,7 @@ exports.deleteTask = async({id, user}) => {
 
         const deletedTask = await taskModel.findByIdAndDelete(id);
 
+        console.log(deletedTask);
         if (!deletedTask){
             return {
                 code: 406,
