@@ -20,6 +20,9 @@
         *{
             font-family: 'Nunito Sans', sans-serif;
             font-family: 'Playpen Sans', cursive;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         a .navlink{
@@ -28,9 +31,41 @@
         }
     </style>
   </head>
-  <body class="h-100">
-    <header class="bg-primary h">
-        <nav class=" container d-flex justify-content-between h-100 navbar-expand-sm  navbar-dark py-3">
+<body class="vh-100">
+    <header class="bg-white d-flex justify-content-between py-3 px-3 shadow rounded">
+        <div class="h-100 ">
+            <a class="navbar-brand text-primary fs-1 navlink" href="/">HipoKampus</a>
+        </div>
+        <nav class="navbar navbar-expand-sm navbar">
+            <div class="container">
+                <button class="navbar-toggler ms-auto mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#n_bar" aria-controls="navbarNavAltMarkup" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="n_bar">
+                    <ul class="navbar-nav  justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link text-black navlink fs-4" href="/user/dashboard">Dashboard</a>
+                        </li>
+                       <% if (user || false) { %>
+                            <li class="nav-item ms-3">
+                                <a class="nav-link text-black navlink fs-4" href="/user/stats">Stats</a>
+                            </li>
+                            <li class="nav-item ms-3">
+                                <a class="nav-link text-black navlink fs-4 " href="/user/logout">Logout</a>
+                            </li>
+                       <% } else { %>
+                            <li class="nav-item ms-3">
+                                <a class="nav-link text-black navlink fs-4" href="/signup">SignUp</a>
+                              </li>
+                              <li class="nav-item ms-3">
+                                <button class="btn border border-black rounded-5"><a class="nav-link text-black navlink fs-6 " href="/login">Get Started</a></button>
+                            </li>
+                       <% } %>
+                      </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- <nav class=" container d-flex justify-content-between h-100 navbar-expand-sm  navbar-dark py-3">
             <div class="h-100 ">
               <a class="navbar-brand fs-1 navlink" href="/">HipoKampus</a>
             </div>
@@ -55,5 +90,5 @@
                     </li>
                <% } %>
               </ul>
-        </nav>
+        </nav> -->
     </header>

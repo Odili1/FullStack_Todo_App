@@ -16,7 +16,7 @@
             <div class="mt-5">
                 <p class="fs-5"><%= message %></p>
                 <p class="fs-5">Click here to create today's task</p>
-                <!-- <button class="bg-primary mx-auto border border-0 rounded p-2"><a href="/user/dashboard/task/create" class="text-white text-decoration-none " >Create Task <i class="bi bi-arrow-bar-right"></i></a></button> -->
+ 
                 <button
                 class="bg-primary mt-3 ax-right border border-0 rounded p-2 text-white"
                 data-bs-toggle="modal"
@@ -104,7 +104,7 @@
                     <tbody>
                         <% tasks.forEach(function(task, i){ %>
                             <tr>
-                                <th scope="row"><%=task._id%></th>
+                                <th scope="row"><%=i+1%></th>
                                 <td><%=task.task%></td>
                                 <td><%=task.status%></td>
                                 <td class="d-flex justify-content-end">
@@ -156,12 +156,9 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <label for="status" class="form-label">Status:</label>
-                                                        <!-- <input type="text" class="form-control" id="status" placeholder="Status" name="status"> -->
-                                                        <!-- hry -->
+
                                                         <div class="input-group mb-3">
-                                                            <label class="input-group-text" for="status"
-                                                            >Options</label
-                                                            >
+  
                                                             <select class="form-select" id="status" name="status">
                                                                 <!-- <option selected>Choose...</option> -->
                                                                 <option value="Pending" selected>Pending</option>
@@ -202,6 +199,7 @@
                 </table>
             </div>
         <%}%>
-    </div>  
+    </div>
+ 
 <%-include('partials/footer')-%>
 
