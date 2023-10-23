@@ -17,7 +17,6 @@ const CreateUser = async ({username, email, password}) => {
                 success: false
             }
         }
-        console.log('no existing' , existingUser);
 
         const user = await UserModel.create({
             username: username,
@@ -25,10 +24,8 @@ const CreateUser = async ({username, email, password}) => {
             password: password,
         });
         
-        console.log('created:', user._id);
         const token = jwt.sign({username: user.username, email: user.email, _id: user._id}, process.env.JWT_SECRET, {expiresIn: '1h'})
 
-        console.log('created:', token);
 
     return {
         code: 201,
@@ -54,7 +51,6 @@ const Login = async ({username, password}) => {
             username: username,
         });
         
-        console.log(user);
         if (!user){
             return {
                 code: 404,
@@ -63,7 +59,6 @@ const Login = async ({username, password}) => {
         }
         
         const validPassword = await user.isValidPassword(password)
-        console.log(validPassword)
     
         if (!validPassword) {
             return {
