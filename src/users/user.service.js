@@ -12,7 +12,7 @@ const CreateUser = async ({username, email, password}) => {
 
         if (existingUser) {
             return {
-                code: 409,
+                code: 403,
                 message: "User already exists",
                 success: false
             }

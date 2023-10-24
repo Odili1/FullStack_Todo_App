@@ -77,6 +77,13 @@
         <% if (tasks) { %>
             <!-- BUTTON TO ADD TASK -->
             <div class="d-flex justify-content-end mt-5">
+                <div class="input-group mb-3">
+  
+                    <select class="form-select" id="status" name="" aria-placeholder="filterBy">
+                        <option value="Pending">Pending</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
                 <!-- Button trigger modal -->
                 <button
                 class="bg-primary ax-right border border-0 rounded p-2 text-white"
