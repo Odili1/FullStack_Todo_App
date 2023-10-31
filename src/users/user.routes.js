@@ -17,7 +17,7 @@ router.post('/signup', middleware.validateSignup, async (req, res) => {
     if (response.code == 400){
         res.redirect('/404')
     }else if(response.code == 403){
-        res.render('signup', {message: response.message})
+        res.render('signup', {user: null, message: response.message})
     } else {
         res.cookie('jwt', response.token);
 
