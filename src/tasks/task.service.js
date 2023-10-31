@@ -4,18 +4,22 @@ require('dotenv').config
 
 exports.getTasks = async(user, query) => {
     try {
-        const tasks = (await taskModel.find({user_id: user._id}));
-        tasks.forEach((task, i) => {
-            console.log(`task ${i+1}`, task._id);
+        // Get All Tasks
+        const allTasks = (await taskModel.find({user_id: user._id}).collation({locale: 'en', strength: 2}).sort({status: 1}));
 
-        })
-        console.log('UserId', user._id);
+        // Filter Completed Tasks
+        const completedTasks = allTasks.filter((task) => task.status === 'Completed');
 
-        if (tasks.length == 0) {
+        // Filter Pending Tasks
+        const pendingTasks = allTasks.filter((task) => task.status === 'Pending');
+
+        if (allTasks.length == 0) {
             return {
                 code: 404,
                 message: 'No tasks for today yet',
-                tasks: null,
+                allTasks: null,
+                pendingTasks: null,
+                completedTasks: null,
                 user,
             }
         }
@@ -24,33 +28,26 @@ exports.getTasks = async(user, query) => {
             return {
                 code: 404,
                 message: 'unauthorized',
-                tasks: false,
+                allTasks: false,
                 user: null
             }
         }
 
-        if (query.status == 'pending'){
-            tasks = tasks.filter((task) => task.status == 'pending');
-        }
 
-        if (query.status == 'completed') {
-            tasks = tasks.filter((task) => task.status == 'completed');
-        }
 
-        if (tasks.length != 0) {
-            // const signedTasks = await jwt.sign(tasks, process.env.JWT_SECRET);
-            // res.signedCookies
-            // console.log(signedTasks);
-            // const hash = objectHash(tasks);
+        if (allTasks.length != 0) {
 
             return {
                 code: 200,
                 message: null,
-                tasks,
+                allTasks,
+                pendingTasks,
+                completedTasks,
                 user
             }
         }
     } catch (error) {
+        console.log(error);
         return {
             code: 409,
             message: 'Something went wrong. Click here to go home'

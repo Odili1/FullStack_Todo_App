@@ -1,6 +1,6 @@
 <%-include('partials/header')-%> 
 
-    <!-- <%=tasks%> -->
+    
     <% if (message) {%>
     
         <div class="alert alert-dark alert-dismissible fade show position-absolute w-100" role="alert">
@@ -12,11 +12,13 @@
     <div class="container mt-5 w-90">
         <h1 class="ax-right">Welcome, <%= user.username %> 👍🏻</h1>
 
-        <% if (!tasks) {%>
+        <!-- If there are not tasks at all, then display -->
+        <% if (!allTasks) {%>
             <div class="mt-5">
                 <p class="fs-5"><%= message %></p>
                 <p class="fs-5">Click here to create today's task</p>
- 
+                
+                <!-- Button to create tasks -->
                 <button
                 class="bg-primary mt-3 ax-right border border-0 rounded p-2 text-white"
                 data-bs-toggle="modal"
@@ -74,16 +76,28 @@
             </div>
         </div>
 
-        <% if (tasks) { %>
+        <!-- If there are tasks -->
+        <% if (allTasks.length != 0) { %>
             <!-- BUTTON TO ADD TASK -->
-            <div class="d-flex justify-content-end mt-5">
-                <div class="input-group mb-3">
-  
-                    <select class="form-select" id="status" name="" aria-placeholder="filterBy">
-                        <option value="Pending">Pending</option>
-                        <option value="Completed">Completed</option>
-                    </select>
-                </div>
+            <div class="d-flex justify-content-between mt-5">
+
+                   <!-- Nav tabs -->
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#all">All (<%= allTasks ? allTasks.length : 0%>)</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#completed">Completed (<%= completedTasks ? completedTasks.length : 0%>)</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#pending">Pending (<%= pendingTasks ? pendingTasks.length : 0%>)</a>
+                        </li>
+                        
+                    </ul>
+
+
                 <!-- Button trigger modal -->
                 <button
                 class="bg-primary ax-right border border-0 rounded p-2 text-white"
@@ -93,120 +107,384 @@
                     Add Task
                 </button>
             </div>
-        
-        
-            <div class="container mt-5">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Task</th>
-                            <th scope="col">Status</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-
-                    <!-- Table -->
-                    
-                    <tbody>
-                        <% tasks.forEach(function(task, i){ %>
-                            <tr>
-                                <th scope="row"><%=i+1%></th>
-                                <td><%=task.task%></td>
-                                <td><%=task.status%></td>
-                                <td class="d-flex justify-content-end">
-                                    <!-- Button trigger modal -->
-                                    <button
-                                    onclick=""
-                                    class="btn btn-outline-light border border-1 rounded px-3 text-dark me-3"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#abc<%=task._id%>"
-                                    >
-                                    ...
-                                    </button>
-
-                                    <!-- Modal -->
-                                    <div
-                                    class="modal fade"
-                                    id="abc<%=task._id%>"
-                                    tabindex="-1"
-                                    aria-labelledby="exampleModalLabel"
-                                    aria-hidden="true"
-                                    >
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                                    Update Task
-                                                    </h1>
-                                                    <button
-                                                    type="button"
-                                                    class="btn-close"
-                                                    data-bs-dismiss="modal"
-                                                    aria-label="Close"
-                                                    ></button>
-                                                </div>
-                                                <form
-                                                    action="/user/dashboard/tasks/update/<%=task._id%>"
-                                                    method="post"
+            
+            <!-- Tab panes -->
+            <div class="tab-content mt-5">
+                <!-- ALL TASKS-->
+                <%if (allTasks.length != 0) {%>
+                    <div class="tab-pane container active" id="all">
+                        <div class="container mt-5">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Task</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                        
+                                <!-- Table -->
+                                
+                                <tbody>
+                                    <% allTasks.forEach(function(task, i){ %>
+                                        <tr>
+                                            <th scope="row"><%=i+1%></th>
+                                            <td><%=task.task%></td>
+                                            <td><%=task.status%></td>
+                                            <td class="d-flex justify-content-end">
+                                                <!-- Button trigger modal -->
+                                                <button
+                                                onclick=""
+                                                class="btn btn-outline-light border border-1 rounded px-3 text-dark me-3"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#abc<%=task._id%>"
                                                 >
-                                                    <div class="modal-body">
-                                                        <label for="task" class="form-label">Task:</label>
-                                                        <input
-                                                            type="text"
-                                                            class="form-control"
-                                                            id="task"
-                                                            placeholder="<%=task.task%>"
-                                                            name="task"
-                                                            value="<%=task.task%>"
-                                                        />
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <label for="status" class="form-label">Status:</label>
-
-                                                        <div class="input-group mb-3">
-  
-                                                            <select class="form-select" id="status" name="status">
-                                                                <!-- <option selected>Choose...</option> -->
-                                                                <option value="Pending" selected>Pending</option>
-                                                                <option value="Completed">Completed</option>
-                                                            </select>
+                                                ...
+                                                </button>
+                        
+                                                <!-- Modal -->
+                                                <div
+                                                class="modal fade"
+                                                id="abc<%=task._id%>"
+                                                tabindex="-1"
+                                                aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true"
+                                                >
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                                                Update Task
+                                                                </h1>
+                                                                <button
+                                                                type="button"
+                                                                class="btn-close"
+                                                                data-bs-dismiss="modal"
+                                                                aria-label="Close"
+                                                                ></button>
+                                                            </div>
+                                                            <form
+                                                                action="/user/dashboard/tasks/update/<%=task._id%>"
+                                                                method="post"
+                                                            >
+                                                                <div class="modal-body">
+                                                                    <label for="task" class="form-label">Task:</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        id="task"
+                                                                        placeholder="<%=task.task%>"
+                                                                        name="task"
+                                                                        value="<%=task.task%>"
+                                                                    />
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <label for="status" class="form-label">Status:</label>
+                        
+                                                                    <div class="input-group mb-3">
+                        
+                                                                        <select class="form-select" id="status" name="status">
+                                                                            <!-- <option selected>Choose...</option> -->
+                                                                            <option value="Pending" selected>Pending</option>
+                                                                            <option value="Completed">Completed</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button
+                                                                        type="button"
+                                                                        class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal"
+                                                                    >
+                                                                        Close
+                                                                    </button>
+                                                                    <button type="submit" class="btn btn-primary">
+                                                                        Update
+                                                                    </button>
+                                                                </div>
+                                                            </form>
                                                         </div>
                                                     </div>
-                                                    <div class="modal-footer">
+                                                </div>
+                                                <div>
+                                                    <form action="/user/dashboard/tasks/delete/<%=task._id%>" method="post">
                                                         <button
-                                                            type="button"
-                                                            class="btn btn-secondary"
-                                                            data-bs-dismiss="modal"
+                                                        type="submit"
+                                                        class="btn btn-danger border border-1 rounded px-2 text-white"
                                                         >
-                                                            Close
+                                                            del
                                                         </button>
-                                                        <button type="submit" class="btn btn-primary">
-                                                            Update
-                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <%})%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <%} else { %>
+                    <p><%= message%></p>
+                    <a class="fst-italic text-decoration-underline" data-bs-toggle="modal"
+                    data-bs-target="#addTask">create</a> a new task for today or go on and<a class="fst-italic text-decoration-underline" href="/">explore the app</a>
+                <%}%>
+
+
+                
+                
+                <!-- COMPLETED TASKS-->
+                <%if (completedTasks && completedTasks.length != 0) {%>
+                    <div class="tab-pane container" id="completed">
+                        <div class="container mt-5">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Task</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                        
+                                <!-- Table -->
+                                
+                                <tbody>
+                                    <% completedTasks.forEach(function(task, i){ %>
+                                        <tr>
+                                            <th scope="row"><%=i+1%></th>
+                                            <td><%=task.task%></td>
+                                            <td><%=task.status%></td>
+                                            <td class="d-flex justify-content-end">
+                                                <!-- Button trigger modal -->
+                                                <button
+                                                onclick=""
+                                                class="btn btn-outline-light border border-1 rounded px-3 text-dark me-3"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#jkl<%=task._id%>"
+                                                >
+                                                ...
+                                                </button>
+                        
+                                                <!-- Modal -->
+                                                <div
+                                                class="modal fade"
+                                                id="jkl<%=task._id%>"
+                                                tabindex="-1"
+                                                aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true"
+                                                >
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                                                Update Task
+                                                                </h1>
+                                                                <button
+                                                                type="button"
+                                                                class="btn-close"
+                                                                data-bs-dismiss="modal"
+                                                                aria-label="Close"
+                                                                ></button>
+                                                            </div>
+                                                            <form
+                                                                action="/user/dashboard/tasks/update/<%=task._id%>"
+                                                                method="post"
+                                                            >
+                                                                <div class="modal-body">
+                                                                    <label for="task" class="form-label">Task:</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        id="task"
+                                                                        placeholder="<%=task.task%>"
+                                                                        name="task"
+                                                                        value="<%=task.task%>"
+                                                                    />
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <label for="status" class="form-label">Status:</label>
+                        
+                                                                    <div class="input-group mb-3">
+                        
+                                                                        <select class="form-select" id="status" name="status">
+                                                                            <!-- <option selected>Choose...</option> -->
+                                                                            <option value="Pending" selected>Pending</option>
+                                                                            <option value="Completed">Completed</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button
+                                                                        type="button"
+                                                                        class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal"
+                                                                    >
+                                                                        Close
+                                                                    </button>
+                                                                    <button type="submit" class="btn btn-primary">
+                                                                        Update
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
                                                     </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <form action="/user/dashboard/tasks/delete/<%=task._id%>" method="post">
-                                            <button
-                                            type="submit"
-                                            class="btn btn-danger border border-1 rounded px-2 text-white"
-                                            >
-                                                del
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        <%})%>
-                    </tbody>
-                </table>
+                                                </div>
+                                                <div>
+                                                    <form action="/user/dashboard/tasks/delete/<%=task._id%>" method="post">
+                                                        <button
+                                                        type="submit"
+                                                        class="btn btn-danger border border-1 rounded px-2 text-white"
+                                                        >
+                                                            del
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <%})%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <%} else { %>
+                    <p><%= message%></p>
+                    <p>Yet to complete a task. Go to pending and update to completed</p>
+                <%}%>
+
+
+
+
+                <!-- PENDING TASKS -->
+                <div class="tab-pane container fade" id="pending">
+                    <%if (pendingTasks.length) {%>
+                        <div class="container mt-5">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Task</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                        
+                                <!-- Table -->
+                                
+                                <tbody>
+                                    <% pendingTasks.forEach(function(task, i){ %>
+                                        <tr>
+                                            <th scope="row"><%=i+1%></th>
+                                            <td><%=task.task%></td>
+                                            <td><%=task.status%></td>
+                                            <td class="d-flex justify-content-end">
+                                                <!-- Button trigger modal -->
+                                                <button
+                                                onclick=""
+                                                class="btn btn-outline-light border border-1 rounded px-3 text-dark me-3"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#xyz<%=task._id%>"
+                                                >
+                                                ...
+                                                </button>
+                        
+                                                <!-- Modal -->
+                                                <div
+                                                class="modal fade"
+                                                id="xyz<%=task._id%>"
+                                                tabindex="-1"
+                                                aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true"
+                                                >
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                                                Update Task
+                                                                </h1>
+                                                                <button
+                                                                type="button"
+                                                                class="btn-close"
+                                                                data-bs-dismiss="modal"
+                                                                aria-label="Close"
+                                                                ></button>
+                                                            </div>
+                                                            <form
+                                                                action="/user/dashboard/tasks/update/<%=task._id%>"
+                                                                method="post"
+                                                            >
+                                                                <div class="modal-body">
+                                                                    <label for="task" class="form-label">Task:</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        id="task"
+                                                                        placeholder="<%=task.task%>"
+                                                                        name="task"
+                                                                        value="<%=task.task%>"
+                                                                    />
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <label for="status" class="form-label">Status:</label>
+                        
+                                                                    <div class="input-group mb-3">
+                        
+                                                                        <select class="form-select" id="status" name="status">
+                                                                            <!-- <option selected>Choose...</option> -->
+                                                                            <option value="Pending" selected>Pending</option>
+                                                                            <option value="Completed">Completed</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button
+                                                                        type="button"
+                                                                        class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal"
+                                                                    >
+                                                                        Close
+                                                                    </button>
+                                                                    <button type="submit" class="btn btn-primary">
+                                                                        Update
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <form action="/user/dashboard/tasks/delete/<%=task._id%>" method="post">
+                                                        <button
+                                                        type="submit"
+                                                        class="btn btn-danger border border-1 rounded px-2 text-white"
+                                                        >
+                                                            del
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <%})%>
+                                </tbody>
+                            </table>
+                        </div>
+                    <%} else {%>
+                        <p><%= message%></p>
+                        <p>Done with all your tasks. Great Job!</p>
+                        <a class="fst-italic text-decoration-underline" data-bs-toggle="modal"
+                        data-bs-target="#addTask">create</a> a new task for today or go on and<a class="fst-italic text-decoration-underline" href="/">explore the app</a>
+                    <%}%>
+                </div>
+
+                <!-- End of Pane -->
             </div>
+
+            <!-- End of if statment -->
         <%}%>
+        
     </div>
  
 <%-include('partials/footer')-%>
+
+
 
