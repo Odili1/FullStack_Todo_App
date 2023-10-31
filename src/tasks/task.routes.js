@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const taskService = require('./task.service');
 const middleware = require('./task.middlesware');
+const taskModel = require('../models/task.model')
 // const cookieParser = require('cookie-parser');
 
 
@@ -10,18 +11,34 @@ const middleware = require('./task.middlesware');
 console.log('Task Entry');
 // Onload
 router.get('/', async(req, res) => {
-    // console.log('Task route' , res.locals.user);
     const query = req.query;
     const user = res.locals.user || null
     const response = await taskService.getTasks(user, query);
     
     if (response.code == 404) {
         console.log(user);
-        res.render('dashboard', {user: user, tasks: response.tasks, message: response.message})
+        res.render('dashboard', {
+            user: user, 
+            allTasks: response.allTasks, 
+            completedTasks: response.completedTasks,
+            pendingTasks: response.pendingTasks, 
+            message: response.message
+        })
+        
     } else if (response.code == 409) {
+        console.log('Task route' , res.locals.user);
         res.redirect('/404')
     } else {
-        res.render('dashboard', {user: response.user, tasks: response.tasks, message: response.message})
+        console.log('tasks', {allTasks: response.allTasks, 
+            completedTasks: response.completedTasks,
+            pendingTasks: response.pendingTasks, });
+        res.render('dashboard', {
+            user: response.user, 
+            allTasks: response.allTasks, 
+            completedTasks: response.completedTasks,
+            pendingTasks: response.pendingTasks, 
+            message: response.message
+        })
     }
 });
 
@@ -44,6 +61,25 @@ router.post('/create', middleware.validateAddTask, async (req, res) => {
     }
 
 });
+
+
+
+// router.get('/completed', async (req, res) => {
+//     try {
+//         const completedTodos = await taskModel.find({status: 'Completed'})
+
+//         if (!completedTodos){
+//             res.render('dashboard' )
+//         }
+//     } catch (error) {
+//         res.render('404', {message: 'Something went wrong on our side'})
+//     }
+// })
+
+
+
+// router.get('/pending')
+
 
 // Update Route
 router.post('/update/:id', async(req, res) => {

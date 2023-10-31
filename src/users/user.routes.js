@@ -51,8 +51,6 @@ router.use(auth.cookieAuth)
 
 
 router.get('/dashboard', (req, res) => {
-    // const {username, _id: id} = res.locals.user
-    // console.log(res.locals.user);
     res.redirect('/user/dashboard/tasks')
 })
 
