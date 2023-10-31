@@ -13,9 +13,10 @@ router.post('/signup', middleware.validateSignup, async (req, res) => {
     const {username, email, password} = req.body
     const response = await service.CreateUser({username, email, password});
 
+    console.log(response);
     if (response.code == 400){
         res.redirect('/404')
-    }else if(response.code == 409){
+    }else if(response.code == 403){
         res.render('signup', {message: response.message})
     } else {
         res.cookie('jwt', response.token);

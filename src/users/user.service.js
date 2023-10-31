@@ -5,6 +5,7 @@ require('dotenv').config()
 
 
 const CreateUser = async ({username, email, password}) => {
+    console.log('signup service');
     try {
         const existingUser = await UserModel.findOne({
             email: email
@@ -26,6 +27,7 @@ const CreateUser = async ({username, email, password}) => {
         
         const token = jwt.sign({username: user.username, email: user.email, _id: user._id}, process.env.JWT_SECRET, {expiresIn: '1h'})
 
+        console.log('signup', {user, token});
 
     return {
         code: 201,
