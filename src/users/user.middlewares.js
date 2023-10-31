@@ -10,6 +10,7 @@ exports.validateSignup = async (req, res, next) => {
 
         await Schema.validateAsync(req.body, {abortEarly: true})
 
+        console.log('valid');
         next()
     } catch (error) {
 

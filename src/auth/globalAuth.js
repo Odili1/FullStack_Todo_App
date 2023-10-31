@@ -67,6 +67,7 @@ exports.cookieAuth = async(req, res, next) => {
         
         next()
     } catch (error) {
+        console.log(error);
         res.render('home', {user: null, status: 401, message: 'Login or Signup to access your dashboard'})
     }
 }

@@ -77,7 +77,7 @@
         </div>
 
         <!-- If there are tasks -->
-        <% if (allTasks.length != 0) { %>
+        <% if (allTasks) { %>
             <!-- BUTTON TO ADD TASK -->
             <div class="d-flex justify-content-between mt-5">
 
@@ -111,7 +111,7 @@
             <!-- Tab panes -->
             <div class="tab-content mt-5">
                 <!-- ALL TASKS-->
-                <%if (allTasks.length != 0) {%>
+                <%if (allTasks) {%>
                     <div class="tab-pane container active" id="all">
                         <div class="container mt-5">
                             <table class="table table-hover">
@@ -234,7 +234,7 @@
                 
                 
                 <!-- COMPLETED TASKS-->
-                <%if (completedTasks && completedTasks.length != 0) {%>
+                <%if (completedTasks) {%>
                     <div class="tab-pane container" id="completed">
                         <div class="container mt-5">
                             <table class="table table-hover">
@@ -357,7 +357,7 @@
 
                 <!-- PENDING TASKS -->
                 <div class="tab-pane container fade" id="pending">
-                    <%if (pendingTasks.length) {%>
+                    <%if (pendingTasks) {%>
                         <div class="container mt-5">
                             <table class="table table-hover">
                                 <thead>
