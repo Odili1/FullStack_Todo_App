@@ -24,7 +24,7 @@ router.get('/', async(req, res) => {
             pendingTasks: response.pendingTasks, 
             message: response.message
         })
-        
+
     } else if (response.code == 409) {
         console.log('Task route' , res.locals.user);
         res.redirect('/404')
@@ -34,9 +34,9 @@ router.get('/', async(req, res) => {
             pendingTasks: response.pendingTasks, });
         res.render('dashboard', {
             user: response.user, 
-            allTasks: response.allTasks, 
-            completedTasks: response.completedTasks,
-            pendingTasks: response.pendingTasks, 
+            allTasks: response.allTasks.length ? response.allTasks : null, 
+            completedTasks: response.completedTasks.length ? response.completedTasks : null,
+            pendingTasks: response.pendingTasks.length ? response.pendingTasks : null, 
             message: response.message
         })
     }
